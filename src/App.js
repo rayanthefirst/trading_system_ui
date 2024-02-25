@@ -1,14 +1,28 @@
 // import "./App.css";
 // import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
+
 // import StrategyMonitor from "./components/strategy_monitor/strategy_monitor";
 // import StrategyCreator from "./components/strategy_creator";
 
 import { OverviewDashBoard } from "./components/OverviewDashBoard/OverviewController";
-import { AccountDashBoard } from "./components/AccountDashBoard/AccountController";
+import { AccountDashBoard } from "./components/TradingAccountPage/AccountController";
 import { StrategyDashBoard } from "./components/StrategyDashBoard/StrategyController";
 
 const App = () => {
+  const [accounts, setAccounts] = useState([]);
+  const [strategies, setStrategies] = useState([]);
+
+  const get_initial_account_data = () => {
+    axios.get(`${process.env.REACT_APP_TRADING_SYSTEM_API_URL}trading_accounts/get_placed_trading_clients`).then((res) => {
+        setAccounts(res.data || []);
+    }).catch((err) => {
+        console.log("Error getting trading client types");
+    })
+    
+}
+
 
   const dashBoards = [{
     id: "main-dashboard",
@@ -17,11 +31,11 @@ const App = () => {
   }, {
     id: "account-dashboard",
     name: "Accounts",
-    component: <AccountDashBoard/>
+    component: <AccountDashBoard accounts={accounts} setAccounts={setAccounts} get_initial_account_data={get_initial_account_data}/>
   }, {
     id: "strategy-dashboard",
     name: "Strategies",
-    component: <StrategyDashBoard/>
+    component: <StrategyDashBoard accounts={accounts} get_initial_account_data={get_initial_account_data} strategies={strategies} setStrategies={setStrategies}/>
   },];
 
   const [activeDashBoard, setActiveDashBoard] = useState(dashBoards[0]);
@@ -32,19 +46,21 @@ const App = () => {
 
       <div className="flex flex-col basis-1/4">
         {dashBoards.map((dashboard, index) => (
-            <button className="my-1  bg-white text-black border-white border-2 hover:border rounded" key={index} onClick={() => (setActiveDashBoard(dashboard))}>
+            <button className="my-1  bg-slate-500 text-black border-white border-2 hover:border rounded" key={index} onClick={() => (setActiveDashBoard(dashboard))}>
               {dashboard.name}
             </button>
         ))}
       </div>
 
-      <div className=" flex basis-3/4 justify-center">
-        {activeDashBoard.component}
+      <div className=" flex basis-4/5 justify-center">
+        <div className="flex basis-4/5">
+          {activeDashBoard.component}
+        </div>
       </div>
 
   
     </div>
-  )
+  );
 }
 
 

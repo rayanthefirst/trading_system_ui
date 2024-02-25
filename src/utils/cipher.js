@@ -9,10 +9,7 @@ export const encrypt_string = (str) => {
 
 export const decrypt_string = (str) => {
     const split_str = str.split("<5>");
-    console.log("split_str", split_str)
     const split_str_arr = split_str.map((c) => String.fromCharCode(c/3));
-    console.log("split_str_arr", split_str_arr)
     const finalStr = split_str_arr.reverse().join("");
-    console.log("finalStr", finalStr)
     return finalStr;
 }
