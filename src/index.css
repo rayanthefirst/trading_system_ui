@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global styles */
+@layer components {
+    .btn {
+        @apply border-2 hover:border rounded;
+    }
+
+    .mainTitle {
+        @apply font-semibold text-3xl ;
+    }
+
+    /* .subTitle {
+        @apply font-semibold text-2xl ;
+        
+    } */
+}
+
+
+
